@@ -19,6 +19,7 @@ package com.surenpi.autotest.report.jira.writer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.surenpi.autotest.report.RecordReportWriter;
+import com.surenpi.autotest.report.jira.conf.IssueConfig;
 import com.surenpi.autotest.report.record.ExceptionRecord;
 import com.surenpi.autotest.report.record.NormalRecord;
 import com.surenpi.autotest.report.record.ProjectRecord;
@@ -36,7 +37,13 @@ public class JiraReportWriter implements RecordReportWriter
 	@Autowired
 	private JiraClient jiraClient;
 	private String project;
-	private String issueType;
+	
+	private IssueConfig issueConfig;
+	
+	public JiraReportWriter(IssueConfig issueConfig)
+	{
+		this.issueConfig = issueConfig;
+	}
 
 	public void write(ExceptionRecord exceptionRecord)
 	{
@@ -44,14 +51,14 @@ public class JiraReportWriter implements RecordReportWriter
 		String summary = exceptionRecord.getNormalRecord().getModuleName()
 				+ "--" + exceptionRecord.getNormalRecord().getMethodName();
 		
-		issueType = "任务";
-		
 		try
 		{
-			jiraClient.createIssue(project, issueType)
+			jiraClient.createIssue(project, issueConfig.getType())
 					 .field(Field.DESCRIPTION, description)
 					 .field(Field.SUMMARY, summary)
-					 .field(Field.PRIORITY,"High")	
+					 .field(Field.LABELS, issueConfig.getLabels())
+					 .field(Field.ASSIGNEE, issueConfig.getAssignee())
+					 .field(Field.PRIORITY, issueConfig.getPriority())	
 					 .execute();
 		}
 		catch (JiraException e)

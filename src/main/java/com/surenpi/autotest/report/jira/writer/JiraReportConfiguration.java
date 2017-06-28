@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.surenpi.autotest.report.RecordReportWriter;
+import com.surenpi.autotest.report.jira.conf.IssueConfig;
 
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.JiraClient;
@@ -42,10 +43,22 @@ public class JiraReportConfiguration
 	@Value("${jira.password}")
 	private String jiraPassword;
 	
+	@Value("${jira.assignee}")
+	private String jiraAssignee;
+	@Value("${jira.labels}")
+	private String jiraLabels;
+	@Value("${jira.priority}")
+	private String jiraPriority;
+	@Value("${jira.type}")
+	private String jiraType;
+	
+	
 	@Bean(name = "jiraReportWriter")
     public RecordReportWriter createWriter()
     {
-        return new JiraReportWriter();
+		IssueConfig issueConfig = new IssueConfig(
+				jiraAssignee, jiraLabels, jiraPriority, jiraType);
+        return new JiraReportWriter(issueConfig);
     }
 
     @Bean
