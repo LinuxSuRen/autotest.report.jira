@@ -4,7 +4,7 @@
 
 	<groupId>com.surenpi.autotest</groupId>
 	<artifactId>autotest.report.jira</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-20170701</version>
 
 	<parent>
 		<groupId>com.surenpi.autotest</groupId>
