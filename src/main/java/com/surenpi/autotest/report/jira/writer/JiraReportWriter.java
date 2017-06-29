@@ -16,6 +16,9 @@
 
 package com.surenpi.autotest.report.jira.writer;
 
+import java.io.File;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.surenpi.autotest.report.RecordReportWriter;
@@ -25,6 +28,7 @@ import com.surenpi.autotest.report.record.NormalRecord;
 import com.surenpi.autotest.report.record.ProjectRecord;
 
 import net.rcarz.jiraclient.Field;
+import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
 
@@ -53,13 +57,28 @@ public class JiraReportWriter implements RecordReportWriter
 		
 		try
 		{
-			jiraClient.createIssue(project, issueConfig.getType())
+			Issue iessue = jiraClient.createIssue(project, issueConfig.getType())
 					 .field(Field.DESCRIPTION, description)
 					 .field(Field.SUMMARY, summary)
 					 .field(Field.LABELS, issueConfig.getLabels())
 					 .field(Field.ASSIGNEE, issueConfig.getAssignee())
 					 .field(Field.PRIORITY, issueConfig.getPriority())	
 					 .execute();
+			
+			List<File> attachFileList = exceptionRecord.getAttachFileList();
+			if(attachFileList != null)
+			{
+				attachFileList.forEach((file) -> {
+					try
+					{
+						iessue.addAttachment(file);
+					}
+					catch (JiraException e)
+					{
+						e.printStackTrace();
+					}
+				});
+			}
 		}
 		catch (JiraException e)
 		{
