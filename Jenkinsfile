@@ -3,12 +3,16 @@ pipeline {
   
   stages {
     stage('Checkout') {
-      checkout scm
+      steps {
+        checkout scm
+      }
     }
 
     stage('Build') {
-      def mvnHome = tool 'M3'
-      sh '${mvnHome}/bin/mvn package'
+      steps {
+        def mvnHome = tool 'M3'
+        sh '${mvnHome}/bin/mvn package'
+      }
     }
   }
 }
