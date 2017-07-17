@@ -1,18 +1,15 @@
-pipeline {
-  agent any
+node {
+  def mvnHome
+  stage('Preparation') {
+    git 'https://github.com/LinuxSuRen/autotest.report.jira.git'
+    mvnHome = tool 'M3'
+  }
   
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
-
-    stage('Build') {
-      steps {
-        def mvnHome = tool 'M3'
-        sh '${mvnHome}/bin/mvn package'
-      }
+  stage('Build') {
+    if(isUnix()){
+      sh "'${mvnHome}/bin/mvn' clean package"
+    }else{
+      bat(/"${mvnHome}\bin\mvn" clean package/)
     }
   }
 }
