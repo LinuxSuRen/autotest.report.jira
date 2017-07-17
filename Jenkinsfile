@@ -1,11 +1,14 @@
-node {
-  stage('Checkout') {
-    checkout scm
-  }
+pipeline {
+  agent any
   
-  stage('Clean') {
-    steps {
-      echo 'prepare  to cleaning'
+  stages {
+    stage('Checkout') {
+      checkout scm
+    }
+
+    stage('Build') {
+      def mvnHome = tool 'M3'
+      sh '${mvnHome}/bin/mvn package'
     }
   }
 }
