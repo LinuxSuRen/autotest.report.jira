@@ -4,6 +4,8 @@ node {
   }
   
   stage('Clean') {
-    mvn clean
+    steps {
+      echo 'prepare  to cleaning'
+    }
   }
 }
