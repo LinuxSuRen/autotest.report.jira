@@ -36,3 +36,20 @@ node {
     }
   }
 }
+
+properties([
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'autotest.report.jira',
+        projectUrlStr: 'https://github.com/LinuxSuRen/autotest.report.jira'
+    ],
+    buildDiscarder(
+        logRotator(
+            artifactDaysToKeepStr: '',
+            artifactNumToKeepStr: '',
+            daysToKeepStr: '7',
+            numToKeepStr: '14'
+        )
+    ),
+    pipelineTriggers([])
+])
